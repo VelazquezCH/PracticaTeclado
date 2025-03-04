@@ -2,6 +2,7 @@ import pygame
 import random
 import string
 
+pygame.mixer.pre_init(44100, -16, 2, 2048)
 # Inicializar pygame
 pygame.init()
 
@@ -18,6 +19,10 @@ AZUL = (0, 0, 255)
 
 # Fuente
 fuente = pygame.font.Font(None, 74)
+
+#Sonido de acierto
+sonido_acierto = pygame.mixer.Sound("Estallido doble.wav")
+sonido_fallo = pygame.mixer.Sound("Silbido.wav")
 
 # Variables
 letra_personalizadas = ["A", "E", "I", "O", "U"] # Define el rango personalizado de letras (ejemplo: solo vocales)
@@ -84,14 +89,24 @@ while ejecutando:
         if evento.type == pygame.KEYDOWN:
             # Verificar si el usuario tecleó correctamente
             if evento.unicode.upper() == letra_actual: # Letra correcta
-                #letra_actual = random.choice(string.ascii_uppercase)
-                letra_actual = random.choice(letra_personalizadas)
+                letra_actual = random.choice(string.ascii_uppercase)
+                #letra_actual = random.choice(letra_personalizadas)
                 x, y = random.randint(50, ANCHO - 50), 0
                 puntaje += 1
+
+                # Reproducir sonido visual
+                sonido_acierto.play()
+
+                # Mostrar efecto visual
                 mensaje = "Bien hecho!"
                 color_mensaje = (0,255,0) # Verde
                 contador_efecto = 30 # muestra el mensaje por 30 frames
+
             else: # Letra incorrecta
+                # Reproducir sonido de fallo
+                sonido_fallo.play()
+
+                # Mostrar efecto visual
                 mensaje ="¡Fallaste!"
                 color_mensaje = (255, 0, 0) # Rojo
                 contador_efecto = 30 # Mostrar el mensaje por 30 frames
